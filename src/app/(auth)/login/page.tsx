@@ -36,6 +36,8 @@ export default function LoginPage() {
         setError(
           authError.message === 'Invalid login credentials'
             ? '이메일 또는 비밀번호가 올바르지 않습니다.'
+            : authError.message === 'Email not confirmed'
+            ? '이메일 인증이 필요합니다. 받은편지함을 확인하거나, Supabase에서 이메일 인증을 비활성화하세요.'
             : '로그인 중 오류가 발생했습니다. 다시 시도해 주세요.'
         )
         setLoading(false)
