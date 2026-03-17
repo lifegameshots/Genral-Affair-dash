@@ -14,10 +14,12 @@ import {
   Building2,
   LogOut,
   ChevronRight,
+  Bell,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import type { UserRole } from '@/types/database'
+import { NotificationBell } from './notification-bell'
 
 interface NavItem {
   label: string
@@ -33,12 +35,15 @@ const userNavItems: NavItem[] = [
   { label: '불편사항', href: '/complaint', icon: MessageSquare },
   { label: '택배', href: '/parcel', icon: PackageOpen },
   { label: '시설 수리', href: '/facility', icon: Wrench },
+  { label: '알림', href: '/notifications', icon: Bell },
 ]
 
 const adminNavItems: NavItem[] = [
   { label: '운영 현황', href: '/admin', icon: LayoutDashboard },
-  { label: '민원 관리', href: '/admin/complaints', icon: MessageSquare },
-  { label: '택배 관리', href: '/admin/parcels', icon: PackageOpen },
+  { label: '분실물 관리', href: '/admin/lost-found', icon: Search },
+  { label: '온도 관리', href: '/admin/temperature', icon: Thermometer },
+  { label: '민원 관리', href: '/admin/complaint', icon: MessageSquare },
+  { label: '택배 관리', href: '/admin/parcel', icon: PackageOpen },
   { label: '장비 관리', href: '/admin/equipment', icon: Package },
   { label: '시설 관리', href: '/admin/facility', icon: Wrench },
 ]
@@ -68,6 +73,7 @@ export function Sidebar({ userRole, userName, userEmail, avatarUrl: _avatarUrl }
 
   function isActive(href: string) {
     if (href === '/dashboard') return pathname === '/dashboard' || pathname === '/'
+    if (href === '/admin') return pathname === '/admin'
     return pathname.startsWith(href)
   }
 
@@ -86,7 +92,6 @@ export function Sidebar({ userRole, userName, userEmail, avatarUrl: _avatarUrl }
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-        {/* User nav section */}
         <div className="mb-1">
           <p className="px-2 mb-1 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
             서비스
@@ -113,7 +118,6 @@ export function Sidebar({ userRole, userName, userEmail, avatarUrl: _avatarUrl }
           })}
         </div>
 
-        {/* Admin nav section */}
         {isAdmin && (
           <div className="mt-4">
             <p className="px-2 mb-1 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
@@ -147,7 +151,6 @@ export function Sidebar({ userRole, userName, userEmail, avatarUrl: _avatarUrl }
       {/* User Profile + Logout */}
       <div className="border-t border-gray-100 p-3">
         <div className="flex items-center gap-2.5 px-2 py-2 rounded-lg">
-          {/* Avatar */}
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold shrink-0">
             {getInitials(userName || '?')}
           </div>
@@ -155,6 +158,7 @@ export function Sidebar({ userRole, userName, userEmail, avatarUrl: _avatarUrl }
             <div className="text-sm font-medium text-gray-900 truncate">{userName}</div>
             <div className="text-[11px] text-gray-400 truncate">{userEmail}</div>
           </div>
+          <NotificationBell />
         </div>
         <button
           onClick={handleLogout}
